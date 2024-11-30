@@ -35,6 +35,17 @@ struct ContentView: View { //1 ContentView behaves like a View
 }
 
 
+struct PageView : View {
+    var body: some View {
+        ZStack(content: {
+            RoundedRectangle(cornerRadius: 15)
+                .foregroundColor(.white)
+            RoundedRectangle(cornerRadius: 15)// 8.wir müssen cornerradius geben.
+                .strokeBorder(lineWidth: 3)
+    })
+}
+
+
 #Preview {
     ContentView()
 }
