@@ -9,7 +9,14 @@ import SwiftUI
 
 struct ContentView: View { //1 ContentView behaves like a View
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
-        ZStack(content: { // Vstack altli ustlu olmasini sagliyor
+        
+        HStack {
+            CardView(isFaceUp: true)
+            CardView()
+            CardView()
+            CardView()
+        }
+        /* ZStack(content: { // Vstack altli ustlu olmasini sagliyor
             // Zstack ayni dikez duzlemde olmasini sagliyor
             //2  burdan padding sonuna kadar property dye gecer
             // 6. content onuce ve padding oncesine parantez ekleyerek, Vstack icerigini belirttik.
@@ -25,24 +32,31 @@ struct ContentView: View { //1 ContentView behaves like a View
             
             Text("🥶").font(.largeTitle)
                 
-        })
+        })*/
         .foregroundColor(Color.orange) // 7 functions to change color
-        .imageScale(.large) //7/ functions to make large
-        .foregroundStyle(.tint)
+        //.imageScale(.large) //7/ functions to make large
+        //.foregroundStyle(.tint)
         //5 creating text struct
         .padding()
     }
 }
 
 
-struct PageView : View {
+struct CardView : View {
+    var isFaceUp : Bool = false
     var body: some View {
         ZStack(content: {
-            RoundedRectangle(cornerRadius: 15)
-                .foregroundColor(.white)
-            RoundedRectangle(cornerRadius: 15)// 8.wir müssen cornerradius geben.
-                .strokeBorder(lineWidth: 3)
-    })
+            if isFaceUp {
+                RoundedRectangle(cornerRadius: 15)
+                    .foregroundColor(.white)
+                RoundedRectangle(cornerRadius: 15)// 8.wir müssen cornerradius geben.
+                    .strokeBorder(lineWidth: 3)
+                Text("🥶").font(.largeTitle)
+            } else {
+                RoundedRectangle(cornerRadius: 15)
+                }
+        })
+    }
 }
 
 
