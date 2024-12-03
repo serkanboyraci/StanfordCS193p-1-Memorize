@@ -46,7 +46,9 @@ struct ContentView: View { //1 ContentView behaves like a View
 struct CardView : View {
     var isFaceUp : Bool = false
     var body: some View {
-        ZStack(content: {
+        ZStack { // 21 Zstack (.alignment: .top yazarak-.center merkeze alir icerigi yukariya alabilirsin. 23 center yazmana gerek yok zaetn default o sekilde. o yuzden siliyourz
+            // 23 bos parantezi de eger trailing closure varsa silebilirsin.
+            //22 burda alignment den sonra content vardi ama herhengi bir icerigi yoktu o yuzden bulnamsina gerek yok
             if isFaceUp {
                 RoundedRectangle(cornerRadius: 15)
                     .foregroundColor(.white)
@@ -56,7 +58,7 @@ struct CardView : View {
             } else {
                 RoundedRectangle(cornerRadius: 15)
                 }
-        })
+        }
     }
 }
 
