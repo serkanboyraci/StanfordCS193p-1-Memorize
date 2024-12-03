@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View { //1 ContentView behaves like a View
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
+        // 20 burda someView yazinca bizim yerimize TupleView yaziyor eger sadece some View yerine Text yazip icine text(...) biseyler yazsaydik sadece text cikardi. Eger 2 tane alt alta ya da yana yana text kullanacaksak some View kullanmak zorundayiz.
         
         HStack {
             CardView(isFaceUp: true)
