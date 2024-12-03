@@ -70,7 +70,7 @@ struct CardView : View {
         .onTapGesture(count:2) { //(count:2) eklersen 2 defa tikladiginda calisir.
             // print("Tapperrrr") great way to control the code.
             // isFaceUp = !isFaceUp // 26 yukariya var basina @State koyarak onu pointer yapiyoruz bu sekilde o degismiyor ancak burayai degistirme yetkimiz oluyor.
-            isFaceUp.toggle() // 27 yukardakinin Bool icin kolay yazma yontemi
+            isFaceUp.toggle() // 27 yukardakinin Bool icin kolay yazma yontemi burasi onemli
             
         }
 
