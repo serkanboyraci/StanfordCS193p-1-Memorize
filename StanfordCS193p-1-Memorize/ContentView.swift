@@ -12,10 +12,10 @@ struct ContentView: View { //1 ContentView behaves like a View
         // 20 burda someView yazinca bizim yerimize TupleView yaziyor eger sadece some View yerine Text yazip icine text(...) biseyler yazsaydik sadece text cikardi. Eger 2 tane alt alta ya da yana yana text kullanacaksak some View kullanmak zorundayiz.
         
         HStack {
-            CardView(isFaceUp: false)
-            CardView() // 24 eger carview struct inda tanimlarsak burda tekrar tanimlamaya gerek yok
-            CardView(isFaceUp: true)
-            CardView(isFaceUp: false)
+            CardView(content: "🤬", isFaceUp: false)
+            CardView(content: "🥶", isFaceUp: false) // 24 eger carview struct inda tanimlarsak burda tekrar tanimlamaya gerek yok
+            CardView(content: "😶‍🌫️", isFaceUp: true)
+            CardView(content: "🤯", isFaceUp: false)
         }
         /* ZStack(content: { // Vstack altli ustlu olmasini sagliyor
             // Zstack ayni dikez duzlemde olmasini sagliyor
@@ -44,7 +44,9 @@ struct ContentView: View { //1 ContentView behaves like a View
 
 
 struct CardView : View {
+    let content : String // content tipi degismesin
     @State var isFaceUp : Bool = true // burayi let yapamazsin // burda da Bool yazmana gerek yok
+    
     var body: some View {
         ZStack { // 21 Zstack (.alignment: .top yazarak-.center merkeze alir icerigi yukariya alabilirsin. 23 center yazmana gerek yok zaetn default o sekilde. o yuzden siliyourz
             // 23 bos parantezi de eger trailing closure varsa silebilirsin.
@@ -53,7 +55,7 @@ struct CardView : View {
             if isFaceUp {
                 shape.fill(.white)
                 shape.strokeBorder(lineWidth :2)
-                Text("🥶").font(.largeTitle)
+                Text(content).font(.largeTitle)
             } else {
                 shape.fill()
             }
