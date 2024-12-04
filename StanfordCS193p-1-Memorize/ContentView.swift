@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct ContentView: View { //1 ContentView behaves like a View
+    let emojis: [String] = ["🤬","🥶","😶‍🌫️","🤯"] // tek tek asagida yazmaktansa hepsini bir array icine koyduk.
+    // Array<String> yazamaktansa [String] yazmak daha mantikli, bu arada hic yazmasanda olur.
+    
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
         // 20 burda someView yazinca bizim yerimize TupleView yaziyor eger sadece some View yerine Text yazip icine text(...) biseyler yazsaydik sadece text cikardi. Eger 2 tane alt alta ya da yana yana text kullanacaksak some View kullanmak zorundayiz.
         
         HStack {
-            CardView(content: "🤬", isFaceUp: false)
-            CardView(content: "🥶", isFaceUp: false) // 24 eger carview struct inda tanimlarsak burda tekrar tanimlamaya gerek yok
-            CardView(content: "😶‍🌫️", isFaceUp: true)
-            CardView(content: "🤯", isFaceUp: false)
+            
+            CardView(content: emojis[0], isFaceUp: false)
+            CardView(content: emojis[1], isFaceUp: false) // 24 eger carview struct inda tanimlarsak burda tekrar tanimlamaya gerek yok
+            CardView(content: emojis[2], isFaceUp: true)
+            CardView(content: emojis[3], isFaceUp: false)
         }
         /* ZStack(content: { // Vstack altli ustlu olmasini sagliyor
             // Zstack ayni dikez duzlemde olmasini sagliyor
