@@ -26,15 +26,33 @@ struct ContentView: View { //1 ContentView behaves like a View
                 }
             }
             HStack { //29 butonlari yan yana yapmak icin yine Hstack kullaniriz
-                Button("Add Card") {
+                Button(action: {
+                    cardCount -= 1
+                }, label: {
+                    Image(systemName :"rectangle.stack.fill.badge.minus")
+                })
+                .imageScale(.large)
+                .font(.largeTitle)
+                
+                Spacer() //ayri durmasi icin
+            
+                Button(action: {
+                    cardCount += 1
+                }, label: {
+                    Image(systemName :"rectangle.stack.fill.badge.plus")
+                })
+                .imageScale(.large)
+                .font(.largeTitle)
+                /*Button("Add Card") { bu buttonlar sadece yaziyla pek hos gozukmuyor onun yerine buraya sembol koymak daha iyi
                     cardCount += 1
                 }
                 Spacer() // birbirinden ayirmak icin
                 Button("Remove Card") {
                     cardCount -= 1
-                }
-            } .foregroundColor(Color.blue)
-                .padding() // etafina cerceve gibi yer acmak icin padding kullaniriz.
+                } */
+            }
+            .foregroundColor(Color.blue)
+            .padding() // etafina cerceve gibi yer acmak icin padding kullaniriz.
         }
         
             
