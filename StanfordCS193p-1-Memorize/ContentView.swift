@@ -14,27 +14,36 @@ struct ContentView: View { //1 ContentView behaves like a View
     
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
         // 20 burda someView yazinca bizim yerimize TupleView yaziyor eger sadece some View yerine Text yazip icine text(...) biseyler yazsaydik sadece text cikardi. Eger 2 tane alt alta ya da yana yana text kullanacaksak some View kullanmak zorundayiz.
+        VStack { // 29 bu sekilde saginda solunda guzel olmadi asagiya almak icin Vstack kullaniriz.
+            HStack {
+                
+                
+                ForEach(0..<cardCount, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
+                    //ardindan { ile closure ypip her view icine bunu koy diyoruz. ve kapatiyoruz.}
+                    // (0..<4 = 0...5 = emojis.indices en guzeli souncusu eklendikce otomatik degisir. //4 ten 7 yaptim otomatik artti.
+                    // 28 bu kadar otomatik olunca cok fazla emojiyi ayni anda gormek istemyourm onun icin bir varibale atamak daha mantikli
+                    CardView(content: emojis[index])  //isFaceUp i default olarak birakiyoruz
+                }
+            }
+            HStack { //29 butonlari yan yana yapmak icin yine Hstack kullaniriz
+                Button("Add Card") {
+                    cardCount += 1
+                }
+                Spacer() // birbirinden ayirmak icin
+                Button("Remove Card") {
+                    cardCount -= 1
+                }
+            } .foregroundColor(Color.blue)
+                .padding() // etafina cerceve gibi yer acmak icin padding kullaniriz.
+        }
         
-        HStack {
             
-            Button("Add Card") {
-                cardCount += 1
-            }
-            ForEach(0..<cardCount, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
-                //ardindan { ile closure ypip her view icine bunu koy diyoruz. ve kapatiyoruz.}
-                // (0..<4 = 0...5 = emojis.indices en guzeli souncusu eklendikce otomatik degisir. //4 ten 7 yaptim otomatik artti.
-                // 28 bu kadar otomatik olunca cok fazla emojiyi ayni anda gormek istemyourm onun icin bir varibale atamak daha mantikli
-                CardView(content: emojis[index])  //isFaceUp i default olarak birakiyoruz
-            }
-            Button("Remove Card") {
-                cardCount -= 1
-            }
             /*
             CardView(content: emojis[0], isFaceUp: false)
             CardView(content: emojis[1], isFaceUp: false) // 24 eger carview struct inda tanimlarsak burda tekrar tanimlamaya gerek yok
             CardView(content: emojis[2], isFaceUp: true)
             CardView(content: emojis[3], isFaceUp: false)*/
-        }
+        
         /* ZStack(content: { // Vstack altli ustlu olmasini sagliyor
             // Zstack ayni dikez duzlemde olmasini sagliyor
             //2  burdan padding sonuna kadar property dye gecer
