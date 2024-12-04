@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View { //1 ContentView behaves like a View
-    let emojis: [String] = ["🤬","🥶","😶‍🌫️","🤯"] // tek tek asagida yazmaktansa hepsini bir array icine koyduk.
+    let emojis: [String] = ["🤬","🥶","😶‍🌫️","🤯","🤬","🥶","😶‍🌫️"] // tek tek asagida yazmaktansa hepsini bir array icine koyduk.
     // Array<String> yazamaktansa [String] yazmak daha mantikli, bu arada hic yazmasanda olur.
     
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
@@ -16,10 +16,16 @@ struct ContentView: View { //1 ContentView behaves like a View
         
         HStack {
             
+            ForEach(emojis.indices, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
+                //ardindan { ile closure ypip her view icine bunu koy diyoruz. ve kapatiyoruz.}
+                // (0..<4 = 0...5 = emojis.indices en guzeli souncusu eklendikce otomatik degisir. //4 ten 7 yaptim otomatik artti.
+                CardView(content: emojis[index])  //isFaceUp i default olarak birakiyoruz
+            }
+            /*
             CardView(content: emojis[0], isFaceUp: false)
             CardView(content: emojis[1], isFaceUp: false) // 24 eger carview struct inda tanimlarsak burda tekrar tanimlamaya gerek yok
             CardView(content: emojis[2], isFaceUp: true)
-            CardView(content: emojis[3], isFaceUp: false)
+            CardView(content: emojis[3], isFaceUp: false)*/
         }
         /* ZStack(content: { // Vstack altli ustlu olmasini sagliyor
             // Zstack ayni dikez duzlemde olmasini sagliyor
