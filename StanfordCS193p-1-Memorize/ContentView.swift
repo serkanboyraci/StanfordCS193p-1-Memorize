@@ -15,47 +15,9 @@ struct ContentView: View { //1 ContentView behaves like a View
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
         // 20 burda someView yazinca bizim yerimize TupleView yaziyor eger sadece some View yerine Text yazip icine text(...) biseyler yazsaydik sadece text cikardi. Eger 2 tane alt alta ya da yana yana text kullanacaksak some View kullanmak zorundayiz.
         VStack { // 29 bu sekilde saginda solunda guzel olmadi asagiya almak icin Vstack kullaniriz.
-            HStack {
-                
-                
-                ForEach(0..<cardCount, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
-                    //ardindan { ile closure ypip her view icine bunu koy diyoruz. ve kapatiyoruz.}
-                    // (0..<4 = 0...5 = emojis.indices en guzeli souncusu eklendikce otomatik degisir. //4 ten 7 yaptim otomatik artti.
-                    // 28 bu kadar otomatik olunca cok fazla emojiyi ayni anda gormek istemyourm onun icin bir varibale atamak daha mantikli
-                    CardView(content: emojis[index])  //isFaceUp i default olarak birakiyoruz
-                }
-            }
-            HStack { //29 butonlari yan yana yapmak icin yine Hstack kullaniriz
-                Button(action: {
-                    cardCount -= 1
-                }, label: {
-                    Image(systemName :"rectangle.stack.fill.badge.minus")
-                })
-                .imageScale(.large)
-                .font(.largeTitle)
-                
-                Spacer() //ayri durmasi icin
-            
-                Button(action: {
-                    cardCount += 1
-                }, label: {
-                    Image(systemName :"rectangle.stack.fill.badge.plus")
-                })
-                .imageScale(.large)
-                .font(.largeTitle)
-                /*Button("Add Card") { bu buttonlar sadece yaziyla pek hos gozukmuyor onun yerine buraya sembol koymak daha iyi
-                    cardCount += 1
-                }
-                Spacer() // birbirinden ayirmak icin
-                Button("Remove Card") {
-                    cardCount -= 1
-                } */
-            }
-            .foregroundColor(Color.blue)
-            .padding() // etafina cerceve gibi yer acmak icin padding kullaniriz.
+            cards
+            cardCountAdjuster // 29 HERSEYI VAR ICLERINE KOYUP YAPTIK
         }
-        
-            
             /*
             CardView(content: emojis[0], isFaceUp: false)
             CardView(content: emojis[1], isFaceUp: false) // 24 eger carview struct inda tanimlarsak burda tekrar tanimlamaya gerek yok
@@ -85,8 +47,61 @@ struct ContentView: View { //1 ContentView behaves like a View
         //5 creating text struct
         .padding()
     }
+    
+    
+    var cards: some View {
+        HStack {
+            ForEach(0..<cardCount, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
+                //ardindan { ile closure ypip her view icine bunu koy diyoruz. ve kapatiyoruz.}
+                // (0..<4 = 0...5 = emojis.indices en guzeli souncusu eklendikce otomatik degisir. //4 ten 7 yaptim otomatik artti.
+                // 28 bu kadar otomatik olunca cok fazla emojiyi ayni anda gormek istemyourm onun icin bir varibale atamak daha mantikli
+                CardView(content: emojis[index])  //isFaceUp i default olarak birakiyoruz
+            }
+        }
+    }
+    
+    var cardCountAdjuster : some View {
+        HStack { //29 butonlari yan yana yapmak icin yine Hstack kullaniriz
+            
+            cardRemover
+            Spacer() //ayri durmasi icin
+            cardAdder
+        }
+        .foregroundColor(Color.blue)
+        .padding() // etafina cerceve gibi yer acmak icin padding kullaniriz.
+    }
+    
+    var cardRemover : some View {
+        Button(action: {
+            if cardCount > 1 {// kartlar min ya da max sayisi gecince crash oluyor engellemek icin if koyacagiz
+                cardCount -= 1
+            }
+        }, label: {
+            Image(systemName :"rectangle.stack.fill.badge.minus")
+        })
+        .imageScale(.large)
+        .font(.largeTitle)
+    }
+    
+    var cardAdder : some View {
+        Button(action: {
+            if cardCount < emojis.count { // buraya uyari konulur
+                cardCount += 1
+            }
+        }, label: {
+            Image(systemName :"rectangle.stack.fill.badge.plus")
+        })
+        .imageScale(.large)
+        .font(.largeTitle)
+        /*Button("Add Card") { bu buttonlar sadece yaziyla pek hos gozukmuyor onun yerine buraya sembol koymak daha iyi
+         cardCount += 1
+         }
+         Spacer() // birbirinden ayirmak icin
+         Button("Remove Card") {
+         cardCount -= 1
+         } */
+    }
 }
-
 
 struct CardView : View {
     let content : String // content tipi degismesin
@@ -118,9 +133,7 @@ struct CardView : View {
             // print("Tapperrrr") great way to control the code.
             // isFaceUp = !isFaceUp // 26 yukariya var basina @State koyarak onu pointer yapiyoruz bu sekilde o degismiyor ancak burayai degistirme yetkimiz oluyor.
             isFaceUp.toggle() // 27 yukardakinin Bool icin kolay yazma yontemi burasi onemli
-            
         }
-
     }
 }
 
