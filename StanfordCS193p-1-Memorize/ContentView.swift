@@ -8,18 +8,26 @@
 import SwiftUI
 
 struct ContentView: View { //1 ContentView behaves like a View
-    let emojis: [String] = ["🤬","🥶","😶‍🌫️","🤯","🤬","🥶","😶‍🌫️"] // tek tek asagida yazmaktansa hepsini bir array icine koyduk.
+    let emojis: [String] = ["🤬","🥶","😶‍🌫️","🤯","🫣","😰","🤢","😈","👺","🤖","👻","🫣","😰","🤢","😈","👺","🤖","👻"] // tek tek asagida yazmaktansa hepsini bir array icine koyduk.
     // Array<String> yazamaktansa [String] yazmak daha mantikli, bu arada hic yazmasanda olur.
+    @State var cardCount : Int = 4
     
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
         // 20 burda someView yazinca bizim yerimize TupleView yaziyor eger sadece some View yerine Text yazip icine text(...) biseyler yazsaydik sadece text cikardi. Eger 2 tane alt alta ya da yana yana text kullanacaksak some View kullanmak zorundayiz.
         
         HStack {
             
-            ForEach(emojis.indices, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
+            Button("Add Card") {
+                cardCount += 1
+            }
+            ForEach(0..<cardCount, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
                 //ardindan { ile closure ypip her view icine bunu koy diyoruz. ve kapatiyoruz.}
                 // (0..<4 = 0...5 = emojis.indices en guzeli souncusu eklendikce otomatik degisir. //4 ten 7 yaptim otomatik artti.
+                // 28 bu kadar otomatik olunca cok fazla emojiyi ayni anda gormek istemyourm onun icin bir varibale atamak daha mantikli
                 CardView(content: emojis[index])  //isFaceUp i default olarak birakiyoruz
+            }
+            Button("Remove Card") {
+                cardCount -= 1
             }
             /*
             CardView(content: emojis[0], isFaceUp: false)
@@ -79,7 +87,7 @@ struct CardView : View {
                 RoundedRectangle(cornerRadius: 15)// .fill yazmaya gerek yok zaten default geliyor.
                 }*/
         }
-        .onTapGesture(count:2) { //(count:2) eklersen 2 defa tikladiginda calisir.
+        .onTapGesture(count:1) { //(count:2) eklersen 2 defa tikladiginda calisir.
             // print("Tapperrrr") great way to control the code.
             // isFaceUp = !isFaceUp // 26 yukariya var basina @State koyarak onu pointer yapiyoruz bu sekilde o degismiyor ancak burayai degistirme yetkimiz oluyor.
             isFaceUp.toggle() // 27 yukardakinin Bool icin kolay yazma yontemi burasi onemli
