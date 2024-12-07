@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct ContentView: View { //1 ContentView behaves like a View
-    let emojis: [String] = ["🤬","🥶","😶‍🌫️","🤯","🫣","😰","🤢","😈","👺","🤖","👻","🫣","😰","🤢","😈","👺","🤖","👻"] // tek tek asagida yazmaktansa hepsini bir array icine koyduk.
+    let emojis: [String] = ["🤬","🥶","😶‍🌫️","🤯","🫣","😰","🤢","😈","👺","🤖","👻","🫣","😰","🤢","😈","👺","🤖","👻","🤢","😈","👺","🤖","👻","🫣","😰","🤢","😈","👺","🤖","👻"] // tek tek asagida yazmaktansa hepsini bir array icine koyduk.
     // Array<String> yazamaktansa [String] yazmak daha mantikli, bu arada hic yazmasanda olur.
     @State var cardCount : Int = 4
     
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
         // 20 burda someView yazinca bizim yerimize TupleView yaziyor eger sadece some View yerine Text yazip icine text(...) biseyler yazsaydik sadece text cikardi. Eger 2 tane alt alta ya da yana yana text kullanacaksak some View kullanmak zorundayiz.
         VStack { // 29 bu sekilde saginda solunda guzel olmadi asagiya almak icin Vstack kullaniriz.
-            cards
+            ScrollView { // 29.9 cardlari asagiya kaydirmka icin gerekli.
+                cards
+            }
+            
+            Spacer() // 29.4 buraya spacer koyunca tum griditemlar en uste gitti.
             cardCountAdjuster // 29 HERSEYI VAR ICLERINE KOYUP YAPTIK
         }
             /*
@@ -48,14 +52,22 @@ struct ContentView: View { //1 ContentView behaves like a View
         .padding()
     }
     
-    
+    // 29 burda upuzun kartlar yapmak yerine bunlari kare kare yapilabilir.
+    // bunu LAzyVGrid ile yapacagiz.
     var cards: some View { //burda {} arasi Viewbuilder degil sadece normal func, we dont need return here.
-        HStack {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120, maximum: 150))]) { // burda griditem() ayrica koseli parantez icine yaziliyor. kac tane grid item isterseniz hepsni belritmeniz gerekli
+            // basta [GridItem(), GridItem(), GridItem()] bu sekilde belirtmistik ama yerine
+            // [GridItem(.adaptive(minimum: ve max belirtebilirsin.
+            // ancak tum sirayi kapali yapinca incecik oluyor sebebi de LAZYGRID hep olabildigince kucuk olmak istiyor. buna cozum bulunmali BUNA COZUM olarak Zstack da Group kullanacagiz
+            // HSTACK OLABILDIGI KADAR BUYU ALAN KULLANIRKEN
+            // LAZYVGRID OLABILIDIG KADAR KUCUK ALAN KULLANIR.
             ForEach(0..<cardCount, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
                 //ardindan { ile closure ypip her view icine bunu koy diyoruz. ve kapatiyoruz.}
                 // (0..<4 = 0...5 = emojis.indices en guzeli souncusu eklendikce otomatik degisir. //4 ten 7 yaptim otomatik artti.
                 // 28 bu kadar otomatik olunca cok fazla emojiyi ayni anda gormek istemyourm onun icin bir varibale atamak daha mantikli
                 CardView(content: emojis[index])  //isFaceUp i default olarak birakiyoruz
+                    .aspectRatio(2/3, contentMode: .fit) // gorunumleri ayarlamak icin
+                
             }
             .foregroundColor(Color.orange)
         }
@@ -70,7 +82,6 @@ struct ContentView: View { //1 ContentView behaves like a View
         }
         .imageScale(.large)
         .font(.largeTitle)
-
         .padding() // etafina cerceve gibi yer acmak icin padding kullaniriz.
     }
     
@@ -80,7 +91,7 @@ struct ContentView: View { //1 ContentView behaves like a View
         }, label: {
             Image(systemName :symbol)
         })
-        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
+        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count) // son rakamdan kucuk olursa or buyuk olursa disabled yapiyor.
     }
     
     var cardRemover : some View {
@@ -133,13 +144,27 @@ struct CardView : View {
             // 23 bos parantezi de eger trailing closure varsa silebilirsin.
             //22 burda alignment den sonra content vardi ama herhengi bir icerigi yoktu o yuzden bulnamsina gerek yok
             let shape = RoundedRectangle(cornerRadius: 15) // burayi let yapmak daha mantikli // burda basta type olarak yani basina : koyarak typ ini bildirmistik ancak gerek yok, zaten esittir yapinca o type inference ile kendisi anliyor.
-            if isFaceUp {
+            Group { // burda her birisine ayri bir islem uygulaniyor
                 shape.fill(.white)
                 shape.strokeBorder(lineWidth :2)
                 Text(content).font(.largeTitle)
-            } else {
-                shape.fill()
             }
+            .opacity(isFaceUp ? 1 : 0) // eger faceup 1 ise gorunmez yap, 0 ise 1 yap
+            shape.fill().opacity(isFaceUp ? 0 : 1) //0 transparent 1 is opak
+            // bu sefer lazyVgrid kuculmedi cunku emoji hala orda sadece gornum opak oldu.
+            
+            
+            /* eski kod buydu ama burda LAzyVgrid ile kucuk inceceik oluyorlardi.
+             if  isFaceUp {
+                shape.fill(.white)
+                shape.strokeBorder(lineWidth :2)
+                Text(content).font(.largeTitle)
+             } else {
+             shape.fill()
+             }
+             
+             
+             */
             
                 /* RoundedRectangle(cornerRadius: 15) // 25 burdaki gibi surekli ayni seyi yazmaktansa bir Roundedrectangle durumunu bir degiskene atamaliyiz.
                     .fill(.white)
