@@ -41,7 +41,7 @@ struct ContentView: View { //1 ContentView behaves like a View
             Text("🥶").font(.largeTitle)
                 
         })*/
-        .foregroundColor(Color.orange) // 7 functions to change color
+        //.foregroundColor(Color.orange) // 7 functions to change color
         //.imageScale(.large) //7/ functions to make large
         //.foregroundStyle(.tint)
         //5 creating text struct
@@ -49,7 +49,7 @@ struct ContentView: View { //1 ContentView behaves like a View
     }
     
     
-    var cards: some View {
+    var cards: some View { //burda {} arasi Viewbuilder degil sadece normal func, we dont need return here.
         HStack {
             ForEach(0..<cardCount, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
                 //ardindan { ile closure ypip her view icine bunu koy diyoruz. ve kapatiyoruz.}
@@ -57,6 +57,7 @@ struct ContentView: View { //1 ContentView behaves like a View
                 // 28 bu kadar otomatik olunca cok fazla emojiyi ayni anda gormek istemyourm onun icin bir varibale atamak daha mantikli
                 CardView(content: emojis[index])  //isFaceUp i default olarak birakiyoruz
             }
+            .foregroundColor(Color.orange)
         }
     }
     
@@ -67,11 +68,31 @@ struct ContentView: View { //1 ContentView behaves like a View
             Spacer() //ayri durmasi icin
             cardAdder
         }
-        .foregroundColor(Color.blue)
+        .imageScale(.large)
+        .font(.largeTitle)
+
         .padding() // etafina cerceve gibi yer acmak icin padding kullaniriz.
     }
     
+    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
+        Button(action: {
+            cardCount += offset
+        }, label: {
+            Image(systemName :symbol)
+        })
+        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
+    }
+    
     var cardRemover : some View {
+        cardCountAdjuster(by: -1, symbol: "rectangle.stack.fill.badge.minus")
+    }
+    var cardAdder : some View {
+        cardCountAdjuster(by: +1, symbol: "rectangle.stack.fill.badge.plus")
+    }
+    
+    
+    /*
+    var cardRemover : some View { // 29 ADDER VE REMOVER BIRBIRINE BENZIYOR, BURAYI BIRBIRINE BENZETELIM.
         Button(action: {
             if cardCount > 1 {// kartlar min ya da max sayisi gecince crash oluyor engellemek icin if koyacagiz
                 cardCount -= 1
@@ -100,7 +121,7 @@ struct ContentView: View { //1 ContentView behaves like a View
          Button("Remove Card") {
          cardCount -= 1
          } */
-    }
+    } */
 }
 
 struct CardView : View {
