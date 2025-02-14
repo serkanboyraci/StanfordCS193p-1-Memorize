@@ -15,11 +15,11 @@ struct ContentView: View { //1 ContentView behaves like a View
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
         // 20 burda someView yazinca bizim yerimize TupleView yaziyor eger sadece some View yerine Text yazip icine text(...) biseyler yazsaydik sadece text cikardi. Eger 2 tane alt alta ya da yana yana text kullanacaksak some View kullanmak zorundayiz.
         VStack { // 29 bu sekilde saginda solunda guzel olmadi asagiya almak icin Vstack kullaniriz.
-            ScrollView { // 29.9 cardlari asagiya kaydirmka icin gerekli. 
+            ScrollView { // 29.9 cardlari asagiya kaydirmka icin gerekli.
                 cards
             }
             
-            Spacer() // 29.4 buraya spacer koyunca tum griditemlar en uste gitti.
+            Spacer() // 29.4 buraya spacer koyu nca tum griditemlar en uste gitti.
             cardCountAdjuster // 29 HERSEYI VAR ICLERINE KOYUP YAPTIK
         }
             /*
@@ -90,6 +90,7 @@ struct ContentView: View { //1 ContentView behaves like a View
             cardCount += offset
         }, label: {
             Image(systemName :symbol)
+                
         })
         .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count) // son rakamdan kucuk olursa or buyuk olursa disabled yapiyor.
     }
@@ -137,7 +138,7 @@ struct ContentView: View { //1 ContentView behaves like a View
 
 struct CardView : View {
     let content : String // content tipi degismesin
-    @State var isFaceUp : Bool = true // burayi let yapamazsin // burda da Bool yazmana gerek yok
+    @State var isFaceUp : Bool = true // burayi let yapamazsin // burda da Bool yazmana gerek yok// @State burayi pointer yapiyor.Hersey degisse bile burasi degismiyor.
     
     var body: some View {
         ZStack { // 21 Zstack (.alignment: .top yazarak-.center merkeze alir icerigi yukariya alabilirsin. 23 center yazmana gerek yok zaetn default o sekilde. o yuzden siliyourz
@@ -174,11 +175,11 @@ struct CardView : View {
             } else {
                 RoundedRectangle(cornerRadius: 15)// .fill yazmaya gerek yok zaten default geliyor.
                 }*/
-        }
+        }  
         .onTapGesture(count:1) { //(count:2) eklersen 2 defa tikladiginda calisir.
             // print("Tapperrrr") great way to control the code.
             // isFaceUp = !isFaceUp // 26 yukariya var basina @State koyarak onu pointer yapiyoruz bu sekilde o degismiyor ancak burayai degistirme yetkimiz oluyor.
-            isFaceUp.toggle() // 27 yukardakinin Bool icin kolay yazma yontemi burasi onemli
+            isFaceUp.toggle() // 27 yukardakinin Bool icin kolay yazma yontemi burasi onemli// toggle Falseu True yada tamtersini yapar.
         }
     }
 }
