@@ -15,12 +15,12 @@ struct ContentView: View { //1 ContentView behaves like a View
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
         // 20 burda someView yazinca bizim yerimize TupleView yaziyor eger sadece some View yerine Text yazip icine text(...) biseyler yazsaydik sadece text cikardi. Eger 2 tane alt alta ya da yana yana text kullanacaksak some View kullanmak zorundayiz.
         VStack { // 29 bu sekilde saginda solunda guzel olmadi asagiya almak icin Vstack kullaniriz.
-            ScrollView { // 29.9 cardlari asagiya kaydirmka icin gerekli.
+            ScrollView { // 29.9 cardlari asagiya kaydirmka icin gerekli!!!!
                 cards
             }
             
             Spacer() // 29.4 buraya spacer koyu nca tum griditemlar en uste gitti.
-            cardCountAdjuster // 29 HERSEYI VAR ICLERINE KOYUP YAPTIK
+            cardCountAdjuster // 29 HERSEYI VAR ICLERINE KOYUP YAPTIK!!!!!!
         }
             /*
             CardView(content: emojis[0], isFaceUp: false)
@@ -54,7 +54,7 @@ struct ContentView: View { //1 ContentView behaves like a View
     
     // 29 burda upuzun kartlar yapmak yerine bunlari kare kare yapilabilir.
     // bunu LAzyVGrid ile yapacagiz.
-    var cards: some View { //burda {} arasi Viewbuilder degil sadece normal func, we dont need return here.
+    var cards: some View { //burda {} arasi Viewbuilder degil sadece normal func, we dont need return here!!!!!!
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120, maximum: 150))]) { // burda griditem() ayrica koseli parantez icine yaziliyor. kac tane grid item isterseniz hepsni belritmeniz gerekli
             // basta [GridItem(), GridItem(), GridItem()] bu sekilde belirtmistik ama yerine
             // [GridItem(.adaptive(minimum: ve max belirtebilirsin.
@@ -66,7 +66,9 @@ struct ContentView: View { //1 ContentView behaves like a View
                 // (0..<4 = 0...5 = emojis.indices en guzeli souncusu eklendikce otomatik degisir. //4 ten 7 yaptim otomatik artti.
                 // 28 bu kadar otomatik olunca cok fazla emojiyi ayni anda gormek istemyourm onun icin bir varibale atamak daha mantikli
                 CardView(content: emojis[index])  //isFaceUp i default olarak birakiyoruz
-                    .aspectRatio(2/3, contentMode: .fit) // gorunumleri ayarlamak icin
+                    .aspectRatio(2/3, contentMode: .fit) // card 2/3
+                //gorunumleri ayarlamak icin
+                //.fit space available ise uyguluyor
                 
             }
             .foregroundColor(Color.orange)
@@ -85,7 +87,7 @@ struct ContentView: View { //1 ContentView behaves like a View
         .padding() // etafina cerceve gibi yer acmak icin padding kullaniriz.
     }
     
-    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
+    func cardCountAdjuster( offset: Int, symbol: String) -> some View { //by offset ile offset yazman arasinda fark yok.
         Button(action: {
             cardCount += offset
         }, label: {
@@ -96,15 +98,17 @@ struct ContentView: View { //1 ContentView behaves like a View
     }
     
     var cardRemover : some View {
-        cardCountAdjuster(by: -1, symbol: "rectangle.stack.fill.badge.minus")
+        cardCountAdjuster(offset: -1, symbol: "rectangle.stack.fill.badge.minus")
+        // by offset yazarsan burda offset yerine sadece by yazabilirsin.birisi external name digeri internal name
     }
     var cardAdder : some View {
-        cardCountAdjuster(by: +1, symbol: "rectangle.stack.fill.badge.plus")
+        cardCountAdjuster(offset: +1, symbol: "rectangle.stack.fill.badge.plus")
     }
     
     
     /*
     var cardRemover : some View { // 29 ADDER VE REMOVER BIRBIRINE BENZIYOR, BURAYI BIRBIRINE BENZETELIM.
+     // 28 BUTONU DEGISKENE VERIP SOMEVIEW OLARAK YAZMAK.
         Button(action: {
             if cardCount > 1 {// kartlar min ya da max sayisi gecince crash oluyor engellemek icin if koyacagiz
                 cardCount -= 1
@@ -145,7 +149,7 @@ struct CardView : View {
             // 23 bos parantezi de eger trailing closure varsa silebilirsin.
             //22 burda alignment den sonra content vardi ama herhengi bir icerigi yoktu o yuzden bulnamsina gerek yok
             let shape = RoundedRectangle(cornerRadius: 15) // burayi let yapmak daha mantikli // burda basta type olarak yani basina : koyarak typ ini bildirmistik ancak gerek yok, zaten esittir yapinca o type inference ile kendisi anliyor.
-            Group { // burda her birisine ayri bir islem uygulaniyor
+            Group { // burda her birisine ayri bir islem uygulaniyor ForEachOne gibi
                 shape.fill(.white)
                 shape.strokeBorder(lineWidth :2)
                 Text(content).font(.largeTitle)
