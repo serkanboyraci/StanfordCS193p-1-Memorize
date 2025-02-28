@@ -8,20 +8,44 @@
 import SwiftUI
 
 struct ContentView: View { //1 ContentView behaves like a View
-    let emojis: [String] = ["🤬","🥶","😶‍🌫️","🤯","🫣","😰","🤢","😈","👺","🤖","👻","🫣","😰","🤢","😈","👺","🤖","👻","🤢","😈","👺","🤖","👻","🫣","😰","🤢","😈","👺","🤖","👻"] // tek tek asagida yazmaktansa hepsini bir array icine koyduk.
+   // tek tek asagida yazmaktansa hepsini bir array icine koyduk.
     // Array<String> yazamaktansa [String] yazmak daha mantikli, bu arada hic yazmasanda olur.
-    @State var cardCount : Int = 4
+
+     
+    //@State var cardCount : Int = 20
+    
+  
+    let title = Text("Memorize!").font(.largeTitle).bold()
+    
+    @State var emojis: [String] = ["😍","🥰","😘","😀","😃","😅","😛","🥸","🤪","😎", "😍","🥰","😘","😀","😃","😅","😛","🥸","🤪","😎"]
+    
+   
     
     var body: some View { //3 some = herhangi bir view = ne olursa olsun goster demek gibi.
         // 20 burda someView yazinca bizim yerimize TupleView yaziyor eger sadece some View yerine Text yazip icine text(...) biseyler yazsaydik sadece text cikardi. Eger 2 tane alt alta ya da yana yana text kullanacaksak some View kullanmak zorundayiz.
-        VStack { // 29 bu sekilde saginda solunda guzel olmadi asagiya almak icin Vstack kullaniriz.
+        
+        
+        
+        //VStack { // 29 bu sekilde saginda solunda guzel olmadi asagiya almak icin Vstack kullaniriz.
+            
+            /*title
+            HStack {
+                themeAdjuster1
+                Spacer()
+                themeAdjuster2
+                Spacer()
+                themeAdjuster3
+            }.imageScale(.large)
+                .font(.largeTitle)
+                .padding()*/
             ScrollView { // 29.9 cardlari asagiya kaydirmka icin gerekli!!!!
                 cards
             }
+            .padding()
             
-            Spacer() // 29.4 buraya spacer koyu nca tum griditemlar en uste gitti.
-            cardCountAdjuster // 29 HERSEYI VAR ICLERINE KOYUP YAPTIK!!!!!!
-        }
+            //Spacer() // 29.4 buraya spacer koyu nca tum griditemlar en uste gitti.
+           // cardCountAdjuster // 29 HERSEYI VAR ICLERINE KOYUP YAPTIK!!!!!!
+        
             /*
             CardView(content: emojis[0], isFaceUp: false)
             CardView(content: emojis[1], isFaceUp: false) // 24 eger carview struct inda tanimlarsak burda tekrar tanimlamaya gerek yok
@@ -49,19 +73,19 @@ struct ContentView: View { //1 ContentView behaves like a View
         //.imageScale(.large) //7/ functions to make large
         //.foregroundStyle(.tint)
         //5 creating text struct
-        .padding()
+        
     }
     
     // 29 burda upuzun kartlar yapmak yerine bunlari kare kare yapilabilir.
     // bunu LAzyVGrid ile yapacagiz.
     var cards: some View { //burda {} arasi Viewbuilder degil sadece normal func, we dont need return here!!!!!!
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120, maximum: 150))]) { // burda griditem() ayrica koseli parantez icine yaziliyor. kac tane grid item isterseniz hepsni belritmeniz gerekli
+        LazyVGrid(columns: [GridItem(.adaptive(minimum:90, maximum: 100))]) { // burda griditem() ayrica koseli parantez icine yaziliyor. kac tane grid item isterseniz hepsni belritmeniz gerekli
             // basta [GridItem(), GridItem(), GridItem()] bu sekilde belirtmistik ama yerine
             // [GridItem(.adaptive(minimum: ve max belirtebilirsin.
             // ancak tum sirayi kapali yapinca incecik oluyor sebebi de LAZYGRID hep olabildigince kucuk olmak istiyor. buna cozum bulunmali BUNA COZUM olarak Zstack da Group kullanacagiz
             // HSTACK OLABILDIGI KADAR BUYU ALAN KULLANIRKEN
             // LAZYVGRID OLABILIDIG KADAR KUCUK ALAN KULLANIR.
-            ForEach(0..<cardCount, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
+            ForEach(emojis.indices, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
                 //ardindan { ile closure ypip her view icine bunu koy diyoruz. ve kapatiyoruz.}
                 // (0..<4 = 0...5 = emojis.indices en guzeli souncusu eklendikce otomatik degisir. //4 ten 7 yaptim otomatik artti.
                 // 28 bu kadar otomatik olunca cok fazla emojiyi ayni anda gormek istemyourm onun icin bir varibale atamak daha mantikli
@@ -74,6 +98,30 @@ struct ContentView: View { //1 ContentView behaves like a View
             .foregroundColor(Color.orange)
         }
     }
+    /*var themeAdjuster1 : some View {
+        Button(action: {
+            emojis = ["🇹🇷","🇦🇿","🇺🇸","🇦🇺","🇩🇪","🇷🇺","🇨🇦","🇭🇷","🇦🇱","🇪🇸","🇹🇷","🇦🇿","🇺🇸","🇦🇺","🇩🇪","🇷🇺","🇨🇦","🇭🇷","🇦🇱","🇪🇸"]
+            
+        }, label: { Image(systemName: "flag.pattern.checkered")
+        })
+
+    }
+    var themeAdjuster2 : some View {
+        Button(action: {
+            emojis = ["🍏","🍐","🍊","🍌","🍉","🍇","🍓","🫐","🍒","🍍","🍏","🍐","🍊","🍌","🍉","🍇","🍓","🫐","🍒","🍍"]
+        }, label: { Image(systemName: "carrot")
+        })
+    }
+    var themeAdjuster3 : some View {
+        Button(action: {
+            emojis = ["⚽️","🏀","🎱","🥋","🛷","🏊🏻‍♂️","🪁","🛝","🎾","⛳️","⚽️","🏀","🎱","🥋","🛷","🏊🏻‍♂️","🪁","🛝","🎾","⛳️"]
+            
+        }, label: { Image(systemName: "soccerball")
+        })
+    }
+    
+    
+
     
     var cardCountAdjuster : some View {
         HStack { //29 butonlari yan yana yapmak icin yine Hstack kullaniriz
@@ -105,8 +153,9 @@ struct ContentView: View { //1 ContentView behaves like a View
         cardCountAdjuster(offset: +1, symbol: "rectangle.stack.fill.badge.plus")
     }
     
-    
+    */
     /*
+    
     var cardRemover : some View { // 29 ADDER VE REMOVER BIRBIRINE BENZIYOR, BURAYI BIRBIRINE BENZETELIM.
      // 28 BUTONU DEGISKENE VERIP SOMEVIEW OLARAK YAZMAK.
         Button(action: {
