@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  EmojiMemoryGameView.swift
 //  StanfordCS193p-1-Memorize
 //
 //  Created by Ali serkan Boyracı  on 28.11.2024.
@@ -7,17 +7,18 @@
 
 import SwiftUI
 
-struct ContentView: View { //1 ContentView behaves like a View
+struct EmojiMemoryGameView: View { //1 ContentView behaves like a View
    // tek tek asagida yazmaktansa hepsini bir array icine koyduk.
     // Array<String> yazamaktansa [String] yazmak daha mantikli, bu arada hic yazmasanda olur.
+    
+    var viewModel: EmojiMemoryGame = EmojiMemoryGame() //  VM haberlesme icin kullanilacak isim kolay anlasilsin idyeboyle verildi.
 
      
     //@State var cardCount : Int = 20
     
   
     let title = Text("Memorize!").font(.largeTitle).bold()
-    
-    @State var emojis: [String] = ["😍","🥰","😘","😀","😃","😅","😛","🥸","🤪","😎", "😍","🥰","😘","😀","😃","😅","😛","🥸","🤪","😎"]
+    // var emojis: [String] = ["🇹🇷","🇦🇿","🇺🇸","🇦🇺","🇩🇪","🇷🇺","🇨🇦","🇭🇷","🇦🇱","🇪🇸"]  46 Artik VM da
     
    
     
@@ -27,9 +28,9 @@ struct ContentView: View { //1 ContentView behaves like a View
         
         
         //VStack { // 29 bu sekilde saginda solunda guzel olmadi asagiya almak icin Vstack kullaniriz.
-            
+            // 33 hepsini sildik.
             /*title
-            HStack {
+            HStack {30
                 themeAdjuster1
                 Spacer()
                 themeAdjuster2
@@ -79,18 +80,23 @@ struct ContentView: View { //1 ContentView behaves like a View
     // 29 burda upuzun kartlar yapmak yerine bunlari kare kare yapilabilir.
     // bunu LAzyVGrid ile yapacagiz.
     var cards: some View { //burda {} arasi Viewbuilder degil sadece normal func, we dont need return here!!!!!!
-        LazyVGrid(columns: [GridItem(.adaptive(minimum:90, maximum: 100))]) { // burda griditem() ayrica koseli parantez icine yaziliyor. kac tane grid item isterseniz hepsni belritmeniz gerekli
+        LazyVGrid(columns: [GridItem(.adaptive(minimum:90, maximum: 100), spacing: 0)], spacing: 0) {
+            // 46spacing 0 iki defa koyunca vertically ve horizontally bitisik yapti
+            
+            // burda griditem() ayrica koseli parantez icine yaziliyor. kac tane grid item isterseniz hepsni belritmeniz gerekli
+            
             // basta [GridItem(), GridItem(), GridItem()] bu sekilde belirtmistik ama yerine
             // [GridItem(.adaptive(minimum: ve max belirtebilirsin.
             // ancak tum sirayi kapali yapinca incecik oluyor sebebi de LAZYGRID hep olabildigince kucuk olmak istiyor. buna cozum bulunmali BUNA COZUM olarak Zstack da Group kullanacagiz
             // HSTACK OLABILDIGI KADAR BUYU ALAN KULLANIRKEN
             // LAZYVGRID OLABILIDIG KADAR KUCUK ALAN KULLANIR.
-            ForEach(emojis.indices, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
+            ForEach(viewModel.cards.indices, id: \.self) { index in // for loop gibi ama fro each ile her view i gormemizi sagliyor.
                 //ardindan { ile closure ypip her view icine bunu koy diyoruz. ve kapatiyoruz.}
                 // (0..<4 = 0...5 = emojis.indices en guzeli souncusu eklendikce otomatik degisir. //4 ten 7 yaptim otomatik artti.
                 // 28 bu kadar otomatik olunca cok fazla emojiyi ayni anda gormek istemyourm onun icin bir varibale atamak daha mantikli
-                CardView(content: emojis[index])  //isFaceUp i default olarak birakiyoruz
+                CardView(viewModel.cards[index])  //isFaceUp i default olarak birakiyoruz
                     .aspectRatio(2/3, contentMode: .fit) // card 2/3
+                    .padding(4) // 46 aralik icin padding kullandik
                 //gorunumleri ayarlamak icin
                 //.fit space available ise uyguluyor
                 
@@ -98,7 +104,7 @@ struct ContentView: View { //1 ContentView behaves like a View
             .foregroundColor(Color.orange)
         }
     }
-    /*var themeAdjuster1 : some View {
+    /*var themeAdjuster1 : some View { 31
         Button(action: {
             emojis = ["🇹🇷","🇦🇿","🇺🇸","🇦🇺","🇩🇪","🇷🇺","🇨🇦","🇭🇷","🇦🇱","🇪🇸","🇹🇷","🇦🇿","🇺🇸","🇦🇺","🇩🇪","🇷🇺","🇨🇦","🇭🇷","🇦🇱","🇪🇸"]
             
@@ -190,8 +196,13 @@ struct ContentView: View { //1 ContentView behaves like a View
 }
 
 struct CardView : View {
-    let content : String // content tipi degismesin
-    @State var isFaceUp : Bool = true // burayi let yapamazsin // burda da Bool yazmana gerek yok// @State burayi pointer yapiyor.Hersey degisse bile burasi degismiyor.
+    let card: MemoryGame<String>.Card // alttakilerin yerine bunu yaptik
+    // 43 let content : String // content tipi degismesin
+    //43 @State var isFaceUp : Bool = true // burayi let yapamazsin // burda da Bool yazmana gerek yok// @State burayi pointer yapiyor.Hersey degisse bile burasi degismiyor.
+    
+    init(_ card: MemoryGame<String>.Card) {
+        self.card = card
+    }
     
     var body: some View {
         ZStack { // 21 Zstack (.alignment: .top yazarak-.center merkeze alir icerigi yukariya alabilirsin. 23 center yazmana gerek yok zaetn default o sekilde. o yuzden siliyourz
@@ -201,10 +212,13 @@ struct CardView : View {
             Group { // burda her birisine ayri bir islem uygulaniyor ForEachOne gibi
                 shape.fill(.white)
                 shape.strokeBorder(lineWidth :2)
-                Text(content).font(.largeTitle)
+                Text(card.content)
+                    .font(.system(size: 200)) // 47buyukluk
+                    .minimumScaleFactor(0.01) // kucultme
+                    .aspectRatio(1, contentMode: .fit) // fit hale getirme
             }
-            .opacity(isFaceUp ? 1 : 0) // eger faceup 1 ise gorunmez yap, 0 ise 1 yap
-            shape.fill().opacity(isFaceUp ? 0 : 1) //0 transparent 1 is opak
+            .opacity(card.isFaceUp ? 1 : 0) // eger faceup 1 ise gorunmez yap, 0 ise 1 yap
+            shape.fill().opacity(card.isFaceUp ? 0 : 1) //0 transparent 1 is opak
             // bu sefer lazyVgrid kuculmedi cunku emoji hala orda sadece gornum opak oldu.
             
             
@@ -228,17 +242,18 @@ struct CardView : View {
             } else {
                 RoundedRectangle(cornerRadius: 15)// .fill yazmaya gerek yok zaten default geliyor.
                 }*/
-        }  
-        .onTapGesture(count:1) { //(count:2) eklersen 2 defa tikladiginda calisir.
+        }
+        // 44 onTapGesture burasi yerine VM olmasi gerek
+        //.onTapGesture(count:1) { //(count:2) eklersen 2 defa tikladiginda calisir.
             // print("Tapperrrr") great way to control the code.
             // isFaceUp = !isFaceUp // 26 yukariya var basina @State koyarak onu pointer yapiyoruz bu sekilde o degismiyor ancak burayai degistirme yetkimiz oluyor.
-            isFaceUp.toggle() // 27 yukardakinin Bool icin kolay yazma yontemi burasi onemli// toggle Falseu True yada tamtersini yapar.
-        }
+           // isFaceUp.toggle() // 27 yukardakinin Bool icin kolay yazma yontemi burasi onemli// toggle Falseu True yada tamtersini yapar.
+        
     }
 }
 
 
 #Preview {
-    ContentView()
+    EmojiMemoryGameView()
 }
 
